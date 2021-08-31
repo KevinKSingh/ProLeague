@@ -12,7 +12,10 @@
 # Update 31st August 
 # Progress, the script can now read all the csv files and creates a JSON file for each 
 # player for all the years. Now we can use the JSON files to post process the data 
-# and do some statistical studies to get totals.
+# and do some statistical studies to get totals. One problem with the current data set is 
+# that only one of the two splits Spring/Summer 
+# I also have to break down the JSON files per year into per split and then per Regular 
+# And Playoffs 
 
 import numpy as np
 import scipy
@@ -56,7 +59,7 @@ def new_csv_reader(csv_file_name, year, stats_dict, player_names):
         csv_reader = csv.DictReader(csv_file)
         for player_dict in csv_reader:
             player_name = player_dict['Player']
-            player_stats = player_dict
+            player_stats = player_dict 
             exclude_keys = ['Player']
             updated_dict = {k: player_dict[k] for k in set(list(player_dict.keys())) - set(exclude_keys)}  
             #print(updated_dict)
@@ -67,9 +70,9 @@ def new_csv_reader(csv_file_name, year, stats_dict, player_names):
                 stats_dict[year] = updated_dict
             else:
                 #stats_dict = load_dict_json(player name) 
-                stats_dict = load_json_dict("JSON/"+str(player_name)+".txt")
+                stats_dict = load_json_dict("JSON/"+str(player_name)+".json")
                 stats_dict[year] = updated_dict
-            write_dict_json(stats_dict, "JSON/"+str(player_name)+".txt")
+            write_dict_json(stats_dict, "JSON/"+str(player_name)+".json")
     return stats_dict
 
 
@@ -85,11 +88,18 @@ def new_csv_reader(csv_file_name, year, stats_dict, player_names):
 
 files = glob.glob("CSV/*.csv") 
 player_names = []
+springCount = 0
+summerCount = 0
+msiCount = 0
+worldsCount = 0
+# 9:eof-4
 for f in files:
-    year = f[8:12]
-    #print(year)
+    #year = f[8:12]
+    year = f[8:-4]
+    print(year)
     stats_dict = {}
     new_csv_reader(f,year,stats_dict, player_names)
+    springCount += 1
 print("JSON file process completed....")
 
 #print(player_names)
