@@ -9,6 +9,11 @@
 # how many games they are ahead or behind, or study trends over the years for long 
 # time players such as Faker/Perkz/Bjergsen/Rookie
 
+# Update 31st August 
+# Progress, the script can now read all the csv files and creates a JSON file for each 
+# player for all the years. Now we can use the JSON files to post process the data 
+# and do some statistical studies to get totals.
+
 import numpy as np
 import scipy
 import pandas as pd
@@ -41,23 +46,54 @@ def read_csv_file(csv_file_name):
     readFile = pd.read_csv(csv_file_name)
     print("Reading complete...")
     stats_dict = {} 
-    print(readFile)
+    player_name = readFile["Player"]
+    print(readFile.ix[0])
+    #print(player_name)   	
     return stats_dict 
+
+def new_csv_reader(csv_file_name, year, stats_dict, player_names):
+    with open(csv_file_name) as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for player_dict in csv_reader:
+            player_name = player_dict['Player']
+            player_stats = player_dict
+            exclude_keys = ['Player']
+            updated_dict = {k: player_dict[k] for k in set(list(player_dict.keys())) - set(exclude_keys)}  
+            #print(updated_dict)
+            if player_name not in player_names:
+                #print("New player detected")
+                player_names.append(player_name)
+                stats_dict = {}
+                stats_dict[year] = updated_dict
+            else:
+                #stats_dict = load_dict_json(player name) 
+                stats_dict = load_json_dict("JSON/"+str(player_name)+".txt")
+                stats_dict[year] = updated_dict
+            write_dict_json(stats_dict, "JSON/"+str(player_name)+".txt")
+    return stats_dict
 
 
 
 # creating a list with the relevant filenames
 
-spring_playoffs_files = ["LEC_"+str(x).zfill(4)+"_Spring_Playoffs.csv" for x in range(startYear,endYear)]
-summer_playoffs_files = ["LEC_"+str(x).zfill(4)+"_Summer_Playoffs.csv" for x in range(startYear, endYear)]
-spring_regular = ["LEC_"+str(x).zfill(4)+"_Spring_RegularSeason.csv" for x in range(startYear, endYear)]
-summer_regular = ["LEC_"+str(x).zfill(4)+"_Summer_RegularSeason.csv" for x in range(startYear, endYear)]
+#spring_playoffs_files = ["LEC_"+str(x).zfill(4)+"_Spring_Playoffs.csv" for x in range(startYear,endYear)]
+#summer_playoffs_files = ["LEC_"+str(x).zfill(4)+"_Summer_Playoffs.csv" for x in range(startYear, endYear)]
+#spring_regular = ["LEC_"+str(x).zfill(4)+"_Spring_RegularSeason.csv" for x in range(startYear, endYear)]
+#summer_regular = ["LEC_"+str(x).zfill(4)+"_Summer_RegularSeason.csv" for x in range(startYear, endYear)]
 
-files = spring_regular + spring_playoffs_files + summer_regular + summer_playoffs_files
+#files = spring_regular + spring_playoffs_files + summer_regular + summer_playoffs_files
 
-
+files = glob.glob("CSV/*.csv") 
+player_names = []
 for f in files:
-    read_csv_file(f)
+    year = f[8:12]
+    #print(year)
+    stats_dict = {}
+    new_csv_reader(f,year,stats_dict, player_names)
+print("JSON file process completed....")
+
+#print(player_names)
+#print(len(player_names))
 
 
 
