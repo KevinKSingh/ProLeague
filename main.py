@@ -27,8 +27,7 @@ from rename_file import *
 
 region_list = ["LEC", "LCK"]
 for region in region_list:
-    create_database(region)
-#rename_csv("LCK")
+    player_list = create_database(region)
 
 
 

@@ -1,10 +1,11 @@
 import numpy as np
-import scipy
 import pandas as pd
 import matplotlib.pyplot as plt 
 import json
 import csv
-import glob 
+import glob
+import os 
+import shutil
 
 # Defining Global Variables
 
@@ -68,9 +69,22 @@ def create_database(flag):
     for f in files:
         #year = f[8:12]
         year = f[8:-4]
-        print(year)
+        #print(year)
         stats_dict = {}
         new_csv_reader(f,year,stats_dict, player_names,flag)
         springCount += 1
+    print("JSON file process completed....")    
+    return player_names
 
-print("JSON file process completed....")
+def make_player_directories(player_names, flag):
+    for player in player_names:
+        directory = player
+        parent_dir = "/home/kevin/Documents/Kevin/Personal/Learning/Programming Projects/ProLeague/ProLeague-main/JSON/" + flag + "/"
+        path = os.path.join(parent_dir,directory)
+        os.mkdir(path)
+
+def move_json(player_names,flag):
+    for player in player_names:
+        initial_location = "/home/kevin/Documents/Kevin/Personal/Learning/Programming Projects/ProLeague/ProLeague-main/JSON/"+flag+"/"+player+".json"
+        final_location = "/home/kevin/Documents/Kevin/Personal/Learning/Programming Projects/ProLeague/ProLeague-main/JSON/"+flag+"/"+player+"/"+player+".json"
+        shutil.move(initial_location,final_location)

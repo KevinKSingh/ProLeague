@@ -1,9 +1,6 @@
-import json
-import csv
 import glob 
 import os
 from posixpath import split
-import re
 
 def rename_csv(flag):
     path = "data/"+flag+"/*.csv" 
