@@ -20,4 +20,14 @@ Link to the website I got the LEC csv files from: https://oracleselixir.com/stat
  - Finish LEC players first then add LEC players at worlds then add the other major regions in. 
 
 
-- Testing to see if this worked from the terminal 19/02/2022
+Project Status:
+
+Created a separate script called databases.py to handle the creation of the players JSON files and folder structure. Currently, the code works for LEC from 2015-2021 end and creates a JSON file for each player that has played in EU LCS or LEC (post rebrand) and gives their average stats per split (regular season and playoffs included) 
+
+I have added the raw data files for LCK from 2013 onwards (including various renames). I tried to create a script to handle the automation of file renaming so the database part of the scripty which expects the file names in a certain format to work as intended, as of 19/02/2022, this is not working. Once this is done, I can repeat for LPL and LCS for the same timelines.Then I will be able to run the database script to generate the player stats for the splits. 
+
+Features to Add:
+
+Player Match History database and Champion specific stats. Breakdown stats by Split, by year, Playoffs vs Regular Season. Then stat specific stuff like win rates per split, win rates by year, by team. 
+
+
