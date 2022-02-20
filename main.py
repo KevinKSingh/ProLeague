@@ -19,15 +19,17 @@
 
 # Update 19th Feb
 # Progress Tried to add LCK data and make a file called rename_file.py where it can mass rename all the files into the format that I want
-# This failed.
+# Created a function to rename the csv files into a format which the rest of the code can then generate the database from .
 # Created a separate script called database.py which contains all the functions to create the JSON files for the player's average season stats. 
+# Created Functions to create a player directory after JSON and moved the JSON files automatically based on the player's name
 
+from gettext import find
 from database import *
 from rename_file import *
+from champions import *
 
-region_list = ["LEC", "LCK"]
-for region in region_list:
-    player_list = create_database(region)
+player_list = find_player_list("LEC")
+generate_champion_stats("/home/kevin/Documents/Kevin/Personal/Learning/Programming Projects/ProLeague/ProLeague-main/data/Total_Games/2022.csv", "LEC")
 
 
 

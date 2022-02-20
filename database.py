@@ -88,3 +88,4 @@ def move_json(player_names,flag):
         initial_location = "/home/kevin/Documents/Kevin/Personal/Learning/Programming Projects/ProLeague/ProLeague-main/JSON/"+flag+"/"+player+".json"
         final_location = "/home/kevin/Documents/Kevin/Personal/Learning/Programming Projects/ProLeague/ProLeague-main/JSON/"+flag+"/"+player+"/"+player+".json"
         shutil.move(initial_location,final_location)
+
