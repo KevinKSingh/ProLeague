@@ -17,97 +17,20 @@
 # I also have to break down the JSON files per year into per split and then per Regular 
 # And Playoffs 
 
-import numpy as np
-import scipy
-import pandas as pd
-import matplotlib.pyplot as plt 
-import json
-import csv
-import glob 
+# Update 19th Feb
+# Progress Tried to add LCK data and make a file called rename_file.py where it can mass rename all the files into the format that I want
+# Created a function to rename the csv files into a format which the rest of the code can then generate the database from .
+# Created a separate script called database.py which contains all the functions to create the JSON files for the player's average season stats. 
+# Created Functions to create a player directory after JSON and moved the JSON files automatically based on the player's name
 
-# Defining Global Variables
+from gettext import find
+from database import *
+from rename_file import *
+from champions import *
 
-# Database Year Start
-startYear = 2015
-
-# Database Yera End
-endYear = 2021 
-
-# Write any dictionary to json file
-def write_dict_json(input_dict, output_file):
-    with open(output_file, 'w') as json_file:
-        json.dump(input_dict, json_file)
-
-# loads dict from json and returns the dict to be used
-def load_json_dict(json_file):
-    with open(json_file, 'r') as json_file:
-        return json.load(json_file)
-
-# Read CSV File
-def read_csv_file(csv_file_name):
-    print("Reading the csv file: " + str(csv_file_name) + ".....\n") 
-    readFile = pd.read_csv(csv_file_name)
-    print("Reading complete...")
-    stats_dict = {} 
-    player_name = readFile["Player"]
-    print(readFile.ix[0])
-    #print(player_name)   	
-    return stats_dict 
-
-def new_csv_reader(csv_file_name, year, stats_dict, player_names):
-    with open(csv_file_name) as csv_file:
-        csv_reader = csv.DictReader(csv_file)
-        for player_dict in csv_reader:
-            player_name = player_dict['Player']
-            player_stats = player_dict 
-            exclude_keys = ['Player']
-            updated_dict = {k: player_dict[k] for k in set(list(player_dict.keys())) - set(exclude_keys)}  
-            #print(updated_dict)
-            if player_name not in player_names:
-                #print("New player detected")
-                player_names.append(player_name)
-                stats_dict = {}
-                stats_dict[year] = updated_dict
-            else:
-                #stats_dict = load_dict_json(player name) 
-                stats_dict = load_json_dict("JSON/"+str(player_name)+".json")
-                stats_dict[year] = updated_dict
-            write_dict_json(stats_dict, "JSON/"+str(player_name)+".json")
-    return stats_dict
+player_list = find_player_list("LEC")
+generate_champion_stats("/home/kevin/Documents/Kevin/Personal/Learning/Programming Projects/ProLeague/ProLeague-main/data/Total_Games/2022.csv", "LEC")
 
 
 
-# creating a list with the relevant filenames
-
-#spring_playoffs_files = ["LEC_"+str(x).zfill(4)+"_Spring_Playoffs.csv" for x in range(startYear,endYear)]
-#summer_playoffs_files = ["LEC_"+str(x).zfill(4)+"_Summer_Playoffs.csv" for x in range(startYear, endYear)]
-#spring_regular = ["LEC_"+str(x).zfill(4)+"_Spring_RegularSeason.csv" for x in range(startYear, endYear)]
-#summer_regular = ["LEC_"+str(x).zfill(4)+"_Summer_RegularSeason.csv" for x in range(startYear, endYear)]
-
-#files = spring_regular + spring_playoffs_files + summer_regular + summer_playoffs_files
-
-files = glob.glob("CSV/*.csv") 
-player_names = []
-springCount = 0
-summerCount = 0
-msiCount = 0
-worldsCount = 0
-# 9:eof-4
-for f in files:
-    #year = f[8:12]
-    year = f[8:-4]
-    print(year)
-    stats_dict = {}
-    new_csv_reader(f,year,stats_dict, player_names)
-    springCount += 1
-print("JSON file process completed....")
-
-#print(player_names)
-#print(len(player_names))
-
-
-
-
-# 2015
-
-# 2016 
+# Test commit from terminal
